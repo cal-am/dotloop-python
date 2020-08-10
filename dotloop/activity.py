@@ -2,4 +2,5 @@ from .bases import DotloopObject
 
 
 class Activity(DotloopObject, id_field='activity_id'):
-    pass
+    def get(self, **kwargs):
+        return self.fetch('get', params=kwargs)

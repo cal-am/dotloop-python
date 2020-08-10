@@ -1,11 +1,14 @@
-from .bases import DotloopObject
-from .account import Account
-from .profile import Profile
-from .contact import Contact
 import requests
+
+from .account import Account
+from .bases import DotloopObject, EndpointDirectory
+from .contact import Contact
+from .profile import Profile
 
 
 class Client:
+    endpoint_directory = EndpointDirectory
+    
     def __init__(self, access_token):
         self.session = requests.Session()
         self.access_token = access_token

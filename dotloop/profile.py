@@ -1,9 +1,9 @@
-from .bases import DotloopObject, DotloopError
+from urllib.parse import urljoin
+
+from .bases import DotloopObject
 from .loop import Loop
 from .loop_it import LoopIt
 from .loop_template import LoopTemplate
-
-from urllib.parse import urljoin
 
 
 class Profile(DotloopObject, id_field='profile_id'):
@@ -20,17 +20,10 @@ class Profile(DotloopObject, id_field='profile_id'):
         return LoopTemplate(parent=self)
 
     def get(self):
-        endpoint = 'profile'
-        if (id_ := getattr(self, self.id_field, None)) is not None:
-            endpoint += f'/{id_}'
-
-        return self.fetch(endpoint, 'get')
+        return self.fetch('get')
 
     def post(self, **kwargs):
-        return self.fetch('profile', 'post', json=kwargs)
+        return self.fetch('post', json=kwargs)
 
     def patch(self, **kwargs):
-        if (attr := getattr(self, self.id_field, None)) is None:
-            raise ValueError(f'{self.id_field} is required')
-
-        return self.fetch(f'profile/{attr}', 'patch', json=kwargs)
+        return self.fetch('patch', json=kwargs)

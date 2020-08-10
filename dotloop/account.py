@@ -2,4 +2,5 @@ from .bases import DotloopObject
 
 
 class Account(DotloopObject):
-    pass
+    def get(self):
+        return self.fetch('get')

@@ -1,7 +1,7 @@
-import requests
 from base64 import b64encode
 from urllib.parse import urljoin
-from .bases import DotloopError
+
+import requests
 
 
 class Authenticate:
@@ -35,10 +35,7 @@ class Authenticate:
             'state': state,
             'redirect_on_deny': redirect_on_deny
         })
-        if response.ok:
-            return response.json()
-        else:
-            raise DotloopError(response.status_code, response.content.decode())
+        return response.json()
 
     def acquire_access_and_refresh_tokens(self, code, redirect_uri, state=None):
         endpoint = 'token'
@@ -49,11 +46,7 @@ class Authenticate:
             'state': state,
             'grant_type': 'authorization_code'
         }, headers=self.headers)
-
-        if response.ok:
-            return response.json()
-        else:
-            raise DotloopError(response.status_code, response.content.decode())
+        return response.json()
 
     def refresh_access_token(self, refresh_token):
         endpoint = 'token'
@@ -62,11 +55,7 @@ class Authenticate:
             'grant_type': 'refresh_token',
             'refresh_token': refresh_token
         }, headers=self.headers)
-
-        if response.ok:
-            return response.json()
-        else:
-            raise DotloopError(response.status_code, response.content.decode())
+        return response.json()
 
     def revoke_access(self, access_token):
         endpoint = 'token/revoke'
@@ -74,8 +63,4 @@ class Authenticate:
         response = self.session.post(url, params={
             'token': access_token
         })
-
-        if response.ok:
-            return response.json()
-        else:
-            raise DotloopError(response.status_code, response.content.decode())
+        return response.json()

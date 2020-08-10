@@ -97,24 +97,24 @@ Inspiration was taken from [dotloop-ruby](https://github.com/sampatbadhe/dotloop
 
 ## To-Do
 - Account
-  - [ ] .get
+  - [x] .get
 - Activity
-  - [ ] .get
+  - [x] .get
 - Contact
-  - [ ] .delete
-  - [ ] .get
-  - [ ] .patch
-  - [ ] .post
+  - [x] .delete
+  - [x] .get
+  - [x] .patch
+  - [x] .post
 - Detail
-  - [ ] .get
-  - [ ] .patch
+  - [x] .get
+  - [x] .patch
 - Document
-  - [ ] .get
+  - [x] .get
   - [ ] .post
 - Folder
-  - [ ] .get
-  - [ ] .patch
-  - [ ] .post
+  - [x] .get
+  - [x] .patch
+  - [x] .post
 - Loop
   - [x] .get
   - [x] .patch
@@ -124,18 +124,18 @@ Inspiration was taken from [dotloop-ruby](https://github.com/sampatbadhe/dotloop
 - LoopTemplate
   - [x] .get
 - Participant
-  - [ ] .delete
-  - [ ] .get
-  - [ ] .patch
-  - [ ] .post
+  - [x] .delete
+  - [x] .get
+  - [x] .patch
+  - [x] .post
 - Profile
   - [x] .get
   - [x] .patch
   - [x] .post
 - Task
-  - [ ] .get
+  - [x] .get
 - TaskList
-  - [ ] .get
+  - [x] .get
 
 ## Disclaimer
 I do not work for dotloop.
