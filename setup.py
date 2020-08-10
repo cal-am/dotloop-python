@@ -28,3 +28,6 @@ if __name__ == '__main__':
         ],
         python_requires='>=3.8',
     )
+
+    # python setup.py sdist bdist_wheel
+    # twine upload dist/*

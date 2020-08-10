@@ -8,13 +8,12 @@ Start by getting access and refresh tokens.
 ```python
 from dotloop import Authenticate
 
-
-with Authenticate('client-id', 'client-secret') as auth:
-    response = auth.url_for_authentication('https://example.com/redirect/')
+auth = Authenticate('dotloop-client-id', 'dotloop-client-secret')
+url = auth.url_for_authentication('https://example.com/redirect/')
 
 ...
 # code is received
-with Authenticate('client-id', 'client-secret') as auth:
+with auth:
     response = auth.acquire_access_and_refresh_tokens(code, 'https://example.com/redirect/')
     # response is a dictionary:
     # {

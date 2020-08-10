@@ -29,8 +29,8 @@ class Loop(DotloopObject, id_field='loop_id'):
     def task_list(self):
         return TaskList(parent=self)
 
-    def get(self):
-        return self.fetch('get')
+    def get(self, **kwargs):
+        return self.fetch('get', params=kwargs)
 
     def post(self, **kwargs):
         return self.fetch('post', json=kwargs)
