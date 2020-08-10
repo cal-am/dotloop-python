@@ -1,5 +1,5 @@
 from base64 import b64encode
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlencode
 
 import requests
 
@@ -27,15 +27,15 @@ class Authenticate:
 
     def url_for_authentication(self, redirect_uri, response_type='code', state=None, redirect_on_deny=False):
         endpoint = 'authorize'
-        url = urljoin(self.base_url, endpoint)
-        response = self.session.get(url, params={
+        params={
             'response_type': response_type,
             'client_id': self.client_id,
             'redirect_uri': redirect_uri,
-            'state': state,
             'redirect_on_deny': redirect_on_deny
-        })
-        return response.json()
+        }
+        if state is not None:
+            params['state'] = state
+        return urljoin(self.base_url, endpoint) + f'?{urlencode(params)}'
 
     def acquire_access_and_refresh_tokens(self, code, redirect_uri, state=None):
         endpoint = 'token'
