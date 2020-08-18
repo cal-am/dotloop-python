@@ -1,3 +1,4 @@
+from json import JSONDecodeError
 from typing import Dict
 from urllib.parse import urljoin
 
@@ -62,7 +63,10 @@ class DotloopObject:
             urljoin(self.base_url, endpoint),
             **kwargs
         )
-        return response.json()
+        try:
+            return response.json()
+        except JSONDecodeError as e:
+            return {'error': 'JSONDecodeError', 'message': f'{str(e)}: {response.content.decode()}', 'status': response.status_code}
 
 
 class NotNoneClass:
@@ -88,7 +92,7 @@ class EndpointDirectoryClass:
             raise KeyError(str(iterable))
 
     items = [
-        # [(object, method, id_value), (endpoint, params, body)]
+        # [(object, method, id_value), endpointToFormat]
         [('LoopIt', 'post', None), 'loop-it'],
         [('Account', 'get', None), 'account'],
         [('Profile', 'get', None), 'profile'],

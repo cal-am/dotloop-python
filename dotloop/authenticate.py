@@ -1,5 +1,5 @@
 from base64 import b64encode
-from urllib.parse import urljoin, urlencode
+from urllib.parse import urlencode, urljoin
 
 import requests
 

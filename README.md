@@ -61,7 +61,7 @@ client.profile(<profile_id>).loop(<loop_id>).participant(<participant_id>).patch
 ```
 
 ## Design Philosophy
-All items accessible in the dotloop API follow a hierarchical structure as represented like this:
+All items accessible in the dotloop API follow a hierarchical structure (i.e. profiles have loops which have folders which have documents) as represented like this:
 
 - Account
 - Contact
@@ -83,10 +83,22 @@ Accessing
 
     PATCH /profile/1/loop/1/folder/1
 
+with data
+
+    {
+      "name": "Disclosures (renamed)"
+    }
+
 translates seamlessly to
 
 ```python
-client.profile(1).loop(1).folder(1).patch(...)
+client.profile(1).loop(1).folder(1).patch(name='Disclosures (renamed)')
+```
+
+Note: if data keys ever have spaces then those keys can be included by unpacking a dictionary
+e.g.
+```python
+client.profile(1).loop(1).detail.patch(**{'Property Information': {...}})
 ```
 
 Inspiration was taken from [dotloop-ruby](https://github.com/sampatbadhe/dotloop-ruby) and [sendgrid-python](https://github.com/sendgrid/sendgrid-python).
