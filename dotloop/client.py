@@ -52,9 +52,8 @@ class Client:
             try:
                 return next(p['id'] for p in profiles['data'] if p.get('default'))
             except StopIteration:
-                # no default profile -> return first profile
                 return next(p['id'] for p in profiles['data'])
-        except KeyError:
+        except:
             if 'error' in profiles:
                 raise ValueError(profiles.get('message', profiles.get('error')))
             elif 'errors' in profiles:
