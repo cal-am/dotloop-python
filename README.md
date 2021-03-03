@@ -148,5 +148,29 @@ Inspiration was taken from [dotloop-ruby](https://github.com/sampatbadhe/dotloop
 - TaskList
   - [x] .get
 
+- Better typing
+- Better passing of parameters
+- Async
+- Better handling of request sessions
+- Better exception handling
+- Better documentation
+- Unit tests
+
+```python
+import asyncio
+
+import aiohttp
+import dotloop
+
+
+async def main():
+  async with aiohttp.ClientSession() as s:
+    async with s.post()
+
+
+if __name__ == '__main__':
+  main()
+```
+
 ## Disclaimer
-I do not work for dotloop.
+I do not work for dotloop nor for Zillow.

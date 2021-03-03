@@ -1,17 +1,28 @@
 from urllib.parse import urljoin
 
-from .bases import DotloopObject
+from .bases import (BASE_API_URL, AsyncDeleteAble, AsyncGetAble,
+                    AsyncPatchAble, AsyncPostAble, RequestableMixin)
 
 
-class Contact(DotloopObject, id_field='contact_id'):
-    def delete(self):
-        return self.fetch('delete')
+class Contact(RequestableMixin, AsyncGetAble, AsyncPostAble, AsyncPatchAble, AsyncDeleteAble):
+    __slots__ = ['contact_id']
 
-    def get(self, **kwargs):
-        return self.fetch('get', params=kwargs)
+    def __init__(self, contact_id: int) -> None:
+        self.contact_id = contact_id
 
-    def patch(self, **kwargs):
-        return self.fetch('patch', json=kwargs)
+    def get_url(self) -> str:
+        endpoint = f'contact/{self.contact_id}'
+        return urljoin(BASE_API_URL, endpoint)
 
-    def post(self, **kwargs):
-        return self.fetch('post', json=kwargs)
+    def __str__(self) -> str:
+        return f'<Contact: contact_id={self.contact_id}>'
+
+
+class Contacts(RequestableMixin, AsyncGetAble):
+    __slots__ = []
+
+    def get_url(self) -> str:
+        return urljoin(BASE_API_URL, 'contact')
+
+    def __str__(self) -> str:
+        return '<Contacts>'

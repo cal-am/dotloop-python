@@ -1,66 +1,68 @@
 from base64 import b64encode
+from typing import Optional
 from urllib.parse import urlencode, urljoin
 
-import requests
+import aiohttp
 
 
-class Authenticate:
-    base_url = 'https://auth.dotloop.com/oauth/'
+__all__ = [
+    'url_for_authentication',
+    'acquire_access_and_refresh_tokens',
+    'refresh_access_token',
+    'revoke_access'
+]
 
-    def __init__(self, client_id, client_secret):
-        self.client_id = client_id
-        self.client_secret = client_secret
+# Constants
+BASE_AUTH_URL = 'https://auth.dotloop.com/oauth/'
 
-    def __enter__(self):
-        self.session = requests.Session()
-        return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.session.close()
+def url_for_authentication(client_id: str, redirect_uri: str, state: Optional[str] = None, redirect_on_deny: bool = False) -> str:
+    params = {
+        'client_id': client_id,
+        'redirect_uri': redirect_uri,
+        'redirect_on_deny': 'true' if redirect_on_deny else 'false'
+    }
 
-    @property
-    def headers(self):
-        return {
-            'Content-Type': 'application/json',
-            'Authorization': 'Basic ' + b64encode(f'{self.client_id}:{self.client_secret}'.encode()).decode()
-        }
+    if state is not None:
+        params['state'] = state
 
-    def url_for_authentication(self, redirect_uri, response_type='code', state=None, redirect_on_deny=False):
-        endpoint = 'authorize'
-        params={
-            'response_type': response_type,
-            'client_id': self.client_id,
-            'redirect_uri': redirect_uri,
-            'redirect_on_deny': redirect_on_deny
-        }
-        if state is not None:
-            params['state'] = state
-        return urljoin(self.base_url, endpoint) + f'?{urlencode(params)}'
+    return urljoin(BASE_AUTH_URL, 'authorize?' + urlencode(params))
 
-    def acquire_access_and_refresh_tokens(self, code, redirect_uri, state=None):
-        endpoint = 'token'
-        url = urljoin(self.base_url, endpoint)
-        response = self.session.post(url, params={
-            'code': code,
-            'redirect_uri': redirect_uri,
-            'state': state,
-            'grant_type': 'authorization_code'
-        }, headers=self.headers)
-        return response.json()
+async def acquire_access_and_refresh_tokens(client: aiohttp.ClientSession, client_id: str, client_secret: str, code: str, redirect_uri: str, state: Optional[str] = None) -> aiohttp.ClientResponse:
+    params = {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': redirect_uri,
+        'state': state
+    }
 
-    def refresh_access_token(self, refresh_token):
-        endpoint = 'token'
-        url = urljoin(self.base_url, endpoint)
-        response = self.session.post(url, params={
-            'grant_type': 'refresh_token',
-            'refresh_token': refresh_token
-        }, headers=self.headers)
-        return response.json()
+    headers = {
+        'Authorization': 'Basic ' + b64encode(f'{client_id}:{client_secret}'.encode()).decode()
+    }
 
-    def revoke_access(self, access_token):
-        endpoint = 'token/revoke'
-        url = urljoin(self.base_url, endpoint)
-        response = self.session.post(url, params={
-            'token': access_token
-        })
-        return response.json()
+    url = urljoin(BASE_AUTH_URL, 'token')
+
+    return await client.post(url, params=params, headers=headers)
+
+async def refresh_access_token(client: aiohttp.ClientSession, client_id: str, client_secret: str, refresh_token: str) -> aiohttp.ClientResponse:
+    params = {
+        'grant_type': 'refresh_token',
+        'refresh_token': refresh_token
+    }
+
+    headers = {
+        'Authorization': 'Basic ' + b64encode(f'{client_id}:{client_secret}'.encode()).decode()
+    }
+
+    url = urljoin(BASE_AUTH_URL, 'token', params=params, headers=headers)
+
+    return await client.post(url)
+
+async def revoke_access(client: aiohttp.ClientSession, access_token: str) -> aiohttp.ClientResponse:
+    params = {
+        'token': access_token
+    }
+
+    url = urljoin(BASE_AUTH_URL, 'token/revoke')
+
+    return await client.post(url, params=params)
