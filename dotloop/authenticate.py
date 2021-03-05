@@ -54,9 +54,9 @@ async def refresh_access_token(client: aiohttp.ClientSession, client_id: str, cl
         'Authorization': 'Basic ' + b64encode(f'{client_id}:{client_secret}'.encode()).decode()
     }
 
-    url = urljoin(BASE_AUTH_URL, 'token', params=params, headers=headers)
+    url = urljoin(BASE_AUTH_URL, 'token')
 
-    return await client.post(url)
+    return await client.post(url, params=params, headers=headers)
 
 async def revoke_access(client: aiohttp.ClientSession, access_token: str) -> aiohttp.ClientResponse:
     params = {

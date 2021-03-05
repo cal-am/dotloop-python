@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     setuptools.setup(
         name='dotloop-python',
-        version='0.1.0',
+        version='0.1.1',
         packages=setuptools.find_packages(),
         install_requires=['requests', 'aiohttp'],
         author='Ben Russell',
